@@ -1,0 +1,6 @@
+<?php
+// wechat configuration
+
+return [
+
+];

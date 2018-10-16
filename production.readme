@@ -1,0 +1,27 @@
+1. config缓存
+    php artisan config:cache 把config文件夹的配置文件合并为一个文件(bootstrap/cache/config.php)，减少运行时载入的文件数量
+    php artisan config:clear 清除config缓存
+    注意：缓存不会随着更新而自动重载
+2. route缓存
+    php artisan route:cache 可提高路由器的注册效率
+    php artisan route:clear 清除route缓存
+    注意：缓存不会随着更新而自动重载，不支持基于闭包的路由
+3. 类映射加载优化
+    php artisan optimize --force 把常用加载的类合并到一个文件里，通过减少文件的加载，来提高运行效率。会生成bootstrap/cache/compiled.php和bootstrap/cache/services.json
+    php artisan clear-compiled 清除类映射缓存
+    注意：此命令要运行在 php artisan config:cache 后执行
+4. 自动加载优化
+    composer dumpautoload -o 此命令不止针对于 Laravel 程序，适用于所有使用 composer 来构建的程序。此命令会把 PSR-0 和 PSR-4 转换为一个类映射表，来提高类的加载速度
+    注意：php artisan optimize --force 命令里已经做了这个操作
+5. 使用 Memcached / Ridis 来存储会话
+6. 使用专业缓存驱动器 Memcached / Ridis
+7. 数据库请求优化
+    数据关联模型读取时使用 延迟预加载 和 预加载
+8. 为数据集书写缓存逻辑
+    $posts = Cache::remember('index.posts', $minutes = 30, function()
+    {
+        return Post::with('comments', 'tags', 'author', 'seo')->whereHidden(0)->get();
+    });
+9. 使用即时编译器 HHVM / OpCache
+10. 前端资源合并
+    作为优化的标准，一个页面只应该加载一个 CSS 和 一个 JS 文件，并且文件要能方便走 CDN，需要文件名随着修改而变化 - Laravel Elixir
